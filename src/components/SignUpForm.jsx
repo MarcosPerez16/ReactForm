@@ -1,12 +1,17 @@
 import { useState } from "react";
 
-function SignUpForm() {
+function SignUpForm({ setToken }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
 
   async function handleSubmit(event) {
     event.preventDefault();
+
+    if (username.length < 5) {
+      setError("Username must be at least five characters long!");
+      return;
+    }
 
     try {
       const url = "https://fsa-jwt-practice.herokuapp.com/signup";
@@ -24,6 +29,7 @@ function SignUpForm() {
 
       const result = await response.json();
       console.log(result);
+      setToken(result.token);
     } catch (error) {
       setError(error.message);
     }
@@ -31,17 +37,17 @@ function SignUpForm() {
 
   return (
     <div>
-      <h2>Sign Up</h2>
-      {error && <p>{error}</p>}
+      <h2 style={{ color: "blue" }}>Sign Up</h2>
+      {error && <p style={{ color: "blue" }}>{error}</p>}
       <form onSubmit={handleSubmit}>
-        <label>
+        <label style={{ color: "black" }}>
           UserName:{" "}
           <input
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
         </label>
-        <label>
+        <label style={{ marginLeft: "10px", color: "black" }}>
           Password:{" "}
           <input
             value={password}
